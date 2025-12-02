@@ -2,7 +2,12 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
     container_name: condominus-app
     restart: unless-stopped
     working_dir: /var/www
@@ -14,6 +19,7 @@ services:
       - db
       - redis
       - rabbitmq
+    user: "${UID:-1000}:${GID:-1000}"
 
   nginx:
     image: nginx:alpine
@@ -30,7 +36,12 @@ services:
       - app
 
   worker:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
     container_name: condominus-worker
     restart: unless-stopped
     working_dir: /var/www
@@ -43,6 +54,7 @@ services:
       - app
       - rabbitmq
       - redis
+    user: "${UID:-1000}:${GID:-1000}"
 
   db:
     image: postgres:15
