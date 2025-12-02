@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: condominus-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - condominus-net
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+
+  nginx:
+    image: nginx:alpine
+    container_name: condominus-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - condominus-net
+    depends_on:
+      - app
+
+  worker:
+    build: .
+    container_name: condominus-worker
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan queue:work --tries=3
+    volumes:
+      - ./:/var/www
+    networks:
+      - condominus-net
+    depends_on:
+      - app
+      - rabbitmq
+      - redis
+
+  db:
+    image: postgres:15
+    container_name: condominus-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: condominus
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - condominus-net
+
+  redis:
+    image: redis:alpine
+    container_name: condominus-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - condominus-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: condominus-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq/
+    networks:
+      - condominus-net
+
+networks:
+  condominus-net:
+    driver: bridge
+
+volumes:
+  pgdata:
+  redisdata:
+  rabbitmqdata:
