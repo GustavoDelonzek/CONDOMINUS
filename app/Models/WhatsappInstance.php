@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WhatsappInstance extends Model
 {
@@ -18,4 +19,9 @@ class WhatsappInstance extends Model
         'status',
         'phone_number_connected',
     ];
+
+    public function adminCompany(): BelongsTo
+    {
+        return $this->belongsTo(AdminCompany::class, 'admin_company_id', 'id');
+    }
 }

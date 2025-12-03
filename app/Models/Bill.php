@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bill extends Model
@@ -22,4 +23,14 @@ class Bill extends Model
         'pdf_url',
         'status'
     ];
+
+    public function condominium(): BelongsTo
+    {
+        return $this->belongsTo(Condominium::class, 'condominium_id', 'id');
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class, 'unit_id', 'id');
+    }
 }
