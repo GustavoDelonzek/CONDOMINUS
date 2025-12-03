@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('message_logs', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->string('name');
+            $table->string('phone_number');
+            $table->string('chat_lid')->nullable();
+            $table->string('direction'); //inbound, outbound
+            $table->text('content');
+            $table->text('media_url')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('message_logs');
     }
 };

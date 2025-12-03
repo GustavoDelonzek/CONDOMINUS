@@ -6,16 +6,18 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AdminCompany extends Model
+class CommonArea extends Model
 {
-    use HasUuids, SoftDeletes;
+    use SoftDeletes, HasUuids;
 
-    protected $table = 'admin_companies';
+    protected $table = 'common_areas';
 
     protected $fillable = [
+        'condominium_id',
         'name',
-        'document_cnpj',
+        'capacity',
+        'photo_url',
+        'booking_rules',
         'is_active',
-        'max_condominiums'
     ];
 }

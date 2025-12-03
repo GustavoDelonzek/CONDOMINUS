@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('memberships', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('unit_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->string('name');
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->string('role'); //super_admin, syndic, resident, porter e landlord...
+            $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('memberships');
     }
 };

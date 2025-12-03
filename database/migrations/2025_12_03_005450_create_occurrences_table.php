@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('occurrences', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->string('name');
+            $table->foreignUuid('unit_id')->constrained()->cascadeOnDelete();
+            $table->string('category');
+            $table->text('description')->nullable();
+            $table->enum('status', ['open', 'in_progress', 'resolved', 'closed'])->default('open');
+            $table->text('admin_response')->nullable();
+            $table->timestamp('responded_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('occurrences');
     }
 };

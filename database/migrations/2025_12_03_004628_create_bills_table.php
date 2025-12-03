@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('bills', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('unit_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->string('name');
+            $table->string('title')->nullable();
+            $table->decimal('amount', 15, 2);
+            $table->date('due_date')->nullable();
+            $table->string('digitable_line')->nullable();
+            $table->text('pdf_url')->nullable();
+            $table->enum('status',  ['pending', 'paid', 'overdue', 'canceled'])->default('pending');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('bills');
     }
 };

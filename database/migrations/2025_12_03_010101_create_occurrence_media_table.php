@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('occurrence_media', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->string('name');
+            $table->foreignUuid('occurrence_id')->constrained()->cascadeOnDelete();
+            $table->text('media_url');
+            $table->enum('media_type', ['image', 'video', 'document', 'audio'])->default('image');
+            $table->timestamp('uploaded_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('occurrence_media');
     }
 };

@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AdminCompany extends Model
+class Unit extends Model
 {
     use HasUuids, SoftDeletes;
 
-    protected $table = 'admin_companies';
+    protected $table = 'units';
 
     protected $fillable = [
-        'name',
-        'document_cnpj',
-        'is_active',
-        'max_condominiums'
+        'condominium_id',
+        'block_id',
+        'number',
+        'floor',
     ];
 }
