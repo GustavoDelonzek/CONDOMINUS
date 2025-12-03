@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->string('chat_lid')->nullable();
             $table->string('photo_url')->nullable();
+            $table->boolean('is_super_admin')->default(false);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

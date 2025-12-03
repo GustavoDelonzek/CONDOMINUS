@@ -16,6 +16,7 @@ class Membership extends Model
 
     protected $fillable = [
         'user_id',
+        'admin_company_id',
         'condominium_id',
         'unit_id',
         'role',
