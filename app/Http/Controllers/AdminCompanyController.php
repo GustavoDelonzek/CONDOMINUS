@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FilterAdminCompanyRequest;
 use App\Http\Requests\StoreAdminCompanyRequest;
+use App\Http\Requests\UpdateAdminCompanyRequest;
 use App\Http\Resources\AdminCompanyResource;
 use App\Http\Services\AdminCompanyService;
 use App\Models\AdminCompany;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class AdminCompanyController extends Controller
@@ -24,15 +24,20 @@ class AdminCompanyController extends Controller
         );
     }
 
-    public function store(StoreAdminCompanyRequest $request)
+    public function store(StoreAdminCompanyRequest $request): AdminCompanyResource
     {
         return AdminCompanyResource::make(
             $this->adminCompanyService->store($request->validated())
         );
     }
 
-    public function show(AdminCompany $adminCompany)
+    public function show(AdminCompany $adminCompany): AdminCompanyResource
     {
         return AdminCompanyResource::make($adminCompany);
+    }
+
+    public function update(UpdateAdminCompanyRequest $request, AdminCompany $adminCompany): AdminCompanyResource
+    {
+        return AdminCompanyResource::make($this->adminCompanyService->update($request->validated(), $adminCompany));
     }
 }

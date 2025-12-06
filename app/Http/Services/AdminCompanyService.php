@@ -20,4 +20,11 @@ class AdminCompanyService
     {
         return AdminCompany::create($data);
     }
+
+    public function update(array $data, AdminCompany $adminCompany): AdminCompany
+    {
+        $adminCompany->update($data);
+
+        return $adminCompany->fresh();
+    }
 }
