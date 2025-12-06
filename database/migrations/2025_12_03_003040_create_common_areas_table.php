@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
             $table->string('name');
             $table->string('photo_url')->nullable();
-            $table->json('booking_rules')->nullable();
+            $table->jsonb('booking_rules')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

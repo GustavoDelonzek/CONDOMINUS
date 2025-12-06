@@ -34,4 +34,9 @@ class AuthService
     {
         auth('api')->logout($user);
     }
+
+    public function registerUser(array $data): User
+    {
+        return User::query()->create($data);
+    }
 }

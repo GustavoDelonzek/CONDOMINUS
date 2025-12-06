@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\LoginUserRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Services\AuthService;
 use Illuminate\Http\Request;
 
@@ -27,5 +29,10 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Successfully logged out'
         ], 200);
+    }
+
+    public function createUser(CreateUserRequest $request): UserResource
+    {
+        return UserResource::make($this->authService->registerUser($request->validated()));
     }
 }

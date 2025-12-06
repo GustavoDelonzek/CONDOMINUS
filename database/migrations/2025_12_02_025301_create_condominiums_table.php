@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignUuid('admin_company_id')->constrained();
             $table->text('address_full');
-            $table->json('settings')->nullable();
+            $table->jsonb('settings')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

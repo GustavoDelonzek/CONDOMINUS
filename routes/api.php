@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\AdminCompanyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\ResponseMiddleware;
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware([
+    ResponseMiddleware::class,
+])->group(function () {
     Route::get('/', function () {
         return response()->json([
             'message' => 'ok'
@@ -15,6 +19,8 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('user/create', [AuthController::class, 'createUser']);
 
+        Route::apiResource('admin-companies', AdminCompanyController::class);
     })->middleware(['auth:api']);
 });
