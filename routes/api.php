@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminCompanyController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\ResponseMiddleware;
+use App\Http\Controllers\CondominiumController;
 
 Route::prefix('v1')->middleware([
     ResponseMiddleware::class,
@@ -24,5 +24,7 @@ Route::prefix('v1')->middleware([
         // Admin companies
         Route::apiResource('admin-companies', AdminCompanyController::class)->except(['destroy']);
 
+        //Condominiums
+        Route::apiResource('condominiums', CondominiumController::class)->except(['destroy']);
     })->middleware(['auth:api']);
 });
