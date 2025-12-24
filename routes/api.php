@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminCompanyController;
 use App\Http\Controllers\BlockController;
+use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\ResponseMiddleware;
@@ -29,5 +30,7 @@ Route::prefix('v1')->middleware([
         Route::apiResource('condominiums', CondominiumController::class)->except(['destroy']);
 
         Route::apiResource('blocks', BlockController::class);
+
+        Route::apiResource('units', UnitController::class)->except(['destroy']);
     })->middleware(['auth:api']);
 });
