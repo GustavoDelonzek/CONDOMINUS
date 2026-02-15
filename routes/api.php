@@ -19,18 +19,20 @@ Route::prefix('v1')->middleware([
 
     Route::post('login', [AuthController::class, 'login']);
 
-    Route::prefix('')->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
+
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('user/create', [AuthController::class, 'createUser']);
 
         // Admin companies
         Route::apiResource('admin-companies', AdminCompanyController::class)->except(['destroy']);
 
-        //Condominiums
+        // Condominiums
         Route::apiResource('condominiums', CondominiumController::class)->except(['destroy']);
 
         Route::apiResource('blocks', BlockController::class);
 
         Route::apiResource('units', UnitController::class)->except(['destroy']);
-    })->middleware(['auth:api']);
+
+    });
 });

@@ -3,23 +3,16 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class CreateUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -37,7 +30,10 @@ class CreateUserRequest extends FormRequest
                     ->symbols(),
                 'confirmed'
             ],
-            //TODO: Role aqui quando implementado de maneira hierarquica
+            'role' => ['required', 'string', 'in:company_admin,syndic,resident'],
+            'admin_company_id' => ['uuid', 'required_without:condominium_id', 'exists:admin_companies,id'],
+            'condominium_id' => ['uuid', 'required_without:admin_company_id', 'exists:condominiums,id'],
+            'unit_id' => ['uuid', Rule::requiredIf(fn () => $this->role === 'resident' && $this->filled('condominium_id')), 'exists:units,id'],
         ];
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 
 class AbstractQueryFilters
 {
+    protected array $searchableColumns = [];
+
     public function __construct(
         protected Builder $query,
         protected array $filters = [],
@@ -27,5 +29,14 @@ class AbstractQueryFilters
         }
 
         return $this->query;
+    }
+
+    public function search(string $value)
+    {
+        foreach ($this->searchableColumns as $searchableValue) {
+            if (Str::contains($searchableValue, $value)) {
+                $this->query->where($searchableValue, 'like', "%{$value}%");
+            }
+        }
     }
 }

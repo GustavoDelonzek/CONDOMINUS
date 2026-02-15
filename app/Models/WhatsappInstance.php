@@ -13,15 +13,15 @@ class WhatsappInstance extends Model
     protected $table = 'whatsapp_instances';
 
     protected $fillable = [
-        'admin_company_id',
+        'condominium_id',
         'instance_id',
         'instance_token',
         'status',
         'phone_number_connected',
     ];
 
-    public function adminCompany(): BelongsTo
+    public function condominium(): BelongsTo
     {
-        return $this->belongsTo(AdminCompany::class, 'admin_company_id', 'id');
+        return $this->belongsTo(Condominium::class);
     }
 }

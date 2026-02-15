@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\FilterAdminCompanyRequest;
 use App\Http\Requests\StoreAdminCompanyRequest;
 use App\Http\Requests\UpdateAdminCompanyRequest;
 use App\Http\Resources\AdminCompanyResource;
+use App\Http\Resources\UserResource;
 use App\Http\Services\AdminCompanyService;
 use App\Models\AdminCompany;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;

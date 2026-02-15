@@ -2,8 +2,9 @@
 
 namespace App\Http\Services;
 
+use App\Models\Membership;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class AuthService
@@ -30,13 +31,24 @@ class AuthService
         ];
     }
 
-    public function logout(User $user): void
+    public function logout(): void
     {
-        auth('api')->logout($user);
+        auth('api')->logout();
     }
 
     public function registerUser(array $data): User
     {
-        return User::query()->create($data);
+        DB::beginTransaction();
+        try {
+            $user = User::query()->create($data);
+            $data['user_id'] = $user->id;
+            Membership::query()->create($data);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $user;
     }
 }
