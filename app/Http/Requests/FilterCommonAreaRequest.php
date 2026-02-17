@@ -5,9 +5,10 @@ namespace App\Http\Requests;
 use App\Traits\HasCondominiumContext;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUnitRequest extends FormRequest
+class FilterCommonAreaRequest extends FormRequest
 {
     use HasCondominiumContext;
+
 
     public function authorize(): bool
     {
@@ -17,8 +18,8 @@ class UpdateUnitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'floor' => 'sometimes|string',
-            'number' => 'sometimes|string',
+            'per_page' => 'sometimes|integer|min:1|max:100',
+            'search' => 'sometimes|string|min:1|max:255',
         ];
     }
 }

@@ -18,9 +18,6 @@ class UnitController extends Controller
     ) {
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(FilterUnitRequest $request): AnonymousResourceCollection
     {
         return UnitResource::collection(
@@ -28,31 +25,29 @@ class UnitController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUnitRequest $request)
+    public function store(StoreUnitRequest $request): UnitResource
     {
         return UnitResource::make(
             $this->unitService->createUnit($request->validated())
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Unit $unit)
+    public function show(Unit $unit): UnitResource
     {
-        return UnitResource::make($unit);
+        return UnitResource::make(
+            $this->unitService->showUnit($unit, request()->current_membership)
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUnitRequest $request, Unit $unit)
+    public function update(UpdateUnitRequest $request, Unit $unit): UnitResource
     {
         return UnitResource::make(
             $this->unitService->updateUnit($unit, $request->validated())
         );
+    }
+
+    public function destroy(Unit $unit): void
+    {
+        $this->unitService->deleteUnit($unit, request()->current_membership);
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('common_areas', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
+            //TODO: adicionar block id se necessário
             $table->string('name');
             $table->string('photo_url')->nullable();
             $table->jsonb('booking_rules')->nullable();

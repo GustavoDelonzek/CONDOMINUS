@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use App\Traits\HasCondominiumContext;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
-class StoreBlockRequest extends FormRequest
+class StoreCommonAreaRequest extends FormRequest
 {
     use HasCondominiumContext;
 
@@ -18,6 +19,9 @@ class StoreBlockRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'booking_rules' => 'sometimes|array',
+            //'photo' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg', TODO: adicionar validação quando integrar com gcp
+            'condominium_id' => 'required|exists:condominiums,id',
         ];
     }
 }

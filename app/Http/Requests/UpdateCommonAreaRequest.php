@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Traits\HasCondominiumContext;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUnitRequest extends FormRequest
+class UpdateCommonAreaRequest extends FormRequest
 {
     use HasCondominiumContext;
 
@@ -17,8 +17,8 @@ class UpdateUnitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'floor' => 'sometimes|string',
-            'number' => 'sometimes|string',
+            'name' => 'sometimes|string|max:255',
+            //'photo' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg',
         ];
     }
 }

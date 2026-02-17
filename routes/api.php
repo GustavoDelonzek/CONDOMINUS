@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\ResponseMiddleware;
 use App\Http\Controllers\CondominiumController;
+use App\Http\Controllers\CommonAreaController;
+use App\Http\Middleware\CheckMembership;
 
 Route::prefix('v1')->middleware([
     ResponseMiddleware::class,
@@ -24,15 +26,18 @@ Route::prefix('v1')->middleware([
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('user/create', [AuthController::class, 'createUser']);
 
-        // Admin companies
         Route::apiResource('admin-companies', AdminCompanyController::class)->except(['destroy']);
 
-        // Condominiums
         Route::apiResource('condominiums', CondominiumController::class)->except(['destroy']);
 
-        Route::apiResource('blocks', BlockController::class);
+        Route::middleware(CheckMembership::class)->group(function () {
+            Route::apiResource('blocks', BlockController::class);
 
-        Route::apiResource('units', UnitController::class)->except(['destroy']);
+            Route::apiResource('units', UnitController::class);
+
+            Route::apiResource('common-areas', CommonAreaController::class);
+        });
+
 
     });
 });

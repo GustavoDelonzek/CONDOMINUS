@@ -40,7 +40,11 @@ class AuthService
     {
         DB::beginTransaction();
         try {
-            $user = User::query()->create($data);
+            $user = User::firstOrCreate(
+                ['phone_number' => $data['phone_number']],
+                $data
+            );
+
             $data['user_id'] = $user->id;
             Membership::query()->create($data);
             DB::commit();

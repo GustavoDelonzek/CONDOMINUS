@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->string('role'); //company_admin, syndic, resident, porter e landlord...
             $table->boolean('is_active')->default(true);
-            $table->softDeletes();
+            $table->softDeletes();  
             $table->timestamps();
         });
     }

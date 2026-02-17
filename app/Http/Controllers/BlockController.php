@@ -13,14 +13,11 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class BlockController extends Controller
 {
     public function __construct(
-        private BlockService $blockService
+        private readonly BlockService $blockService
     ) {
 
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(FilterBlockRequest $request): AnonymousResourceCollection
     {
         return BlockResource::collection(
@@ -28,9 +25,6 @@ class BlockController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreBlockRequest $request): BlockResource
     {
         return BlockResource::make(
@@ -38,18 +32,13 @@ class BlockController extends Controller
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Block $block)
+    public function show(Block $block): BlockResource
     {
-        //TODO: Apenas adicionar as verificações necessárias aqui
-        return BlockResource::make($block);
+        return BlockResource::make(
+            $this->blockService->showBlock($block, request()->current_membership)
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateBlockRequest $request, Block $block): BlockResource
     {
         return BlockResource::make(
@@ -57,12 +46,8 @@ class BlockController extends Controller
         );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Block $block)
+    public function destroy(Block $block): void
     {
-        //TODO: adicionar as verificações necessárias...
-        $block->delete();
+        $this->blockService->deleteBlock($block, request()->current_membership);
     }
 }
