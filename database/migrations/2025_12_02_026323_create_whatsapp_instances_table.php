@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('whatsapp_instances', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('condominium_id')->constrained('condominiums')->cascadeOnDelete();
-            $table->string('instance_id');
-            $table->string('instance_token'); // TODO: adicionar meu client token na env
+            $table->string('instance_id')->nullable();
+            $table->string('instance_token')->nullable(); // TODO: adicionar meu client token na env
             $table->string('status'); //TODO: enum com 'connected', 'disconnected', 'qrcode'
             $table->string('phone_number_connected')->nullable();
             $table->timestamps();

@@ -9,6 +9,7 @@ use App\Http\Middleware\ResponseMiddleware;
 use App\Http\Controllers\CondominiumController;
 use App\Http\Controllers\CommonAreaController;
 use App\Http\Middleware\CheckMembership;
+use App\Http\Controllers\WhatsappInstanceController;
 
 Route::prefix('v1')->middleware([
     ResponseMiddleware::class,
@@ -31,6 +32,11 @@ Route::prefix('v1')->middleware([
         Route::apiResource('condominiums', CondominiumController::class)->except(['destroy']);
 
         Route::middleware(CheckMembership::class)->group(function () {
+            Route::post('whatsapp-instances', [WhatsappInstanceController::class, 'store']);
+            Route::post('whatsapp-instances', [WhatsappInstanceController::class, 'show']);
+            Route::post('whatsapp-instances/qr-code', [WhatsappInstanceController::class, 'qrCode']);
+
+
             Route::apiResource('blocks', BlockController::class);
 
             Route::apiResource('units', UnitController::class);

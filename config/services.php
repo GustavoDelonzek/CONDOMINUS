@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'zapi' => [
+        'admin_token' => env('ZAPI_ADMIN_TOKEN'),
+        'base_url' => env('ZAPI_BASE_URL'),
+        'webhook_url' => env('ZAPI_WEBHOOK_URL'),
+    ]
+
 ];
