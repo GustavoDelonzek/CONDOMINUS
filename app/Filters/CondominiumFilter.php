@@ -13,9 +13,4 @@ class CondominiumFilter extends AbstractQueryFilters
     {
         $this->query->where('address_full', 'ilike', '%' . $address . '%');
     }
-
-    public function adminCompanyId(string $adminCompanyId): void
-    {
-        $this->query->where('admin_company_id', $adminCompanyId);
-    }
 }

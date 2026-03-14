@@ -23,7 +23,6 @@ class StoreCondominiumRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'admin_company_id' => ['required', 'uuid', 'exists:admin_companies,id'],
             'address_full' => ['required', 'string', 'max:255'],
             'settings' => ['sometimes', 'array'],
         ];

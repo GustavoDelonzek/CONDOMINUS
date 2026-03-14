@@ -10,13 +10,12 @@ return new class extends Migration
     {
         Schema::create('memberships', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('admin_company_id')->nullable()->constrained('admin_companies')->cascadeOnDelete();
             $table->foreignUuid('unit_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignUuid('condominium_id')->nullable()->constrained('condominiums')->cascadeOnDelete();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->string('role'); //company_admin, syndic, resident, porter e landlord...
             $table->boolean('is_active')->default(true);
-            $table->softDeletes();  
+            $table->softDeletes();
             $table->timestamps();
         });
     }

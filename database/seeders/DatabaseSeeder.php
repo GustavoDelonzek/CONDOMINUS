@@ -7,7 +7,6 @@ use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\AdminCompany;
 use App\Models\Condominium;
 use App\Models\Block;
 
@@ -21,12 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminCompany = AdminCompany::factory()->create([
-            'name' => 'Admin Tech Gestão',
-        ]);
-
         $condo = Condominium::create([
-            'admin_company_id' => $adminCompany->id,
             'name' => 'Residencial Aurora',
             'address_full' => 'Rua das Flores, 123',
         ]);

@@ -95,6 +95,19 @@ services:
     networks:
       - condominus-net
 
+  waha:
+    image: devlikeapro/waha:latest
+    container_name: condominus_waha
+    ports:
+      - "3000:3000"
+    environment:
+      - WAHA_DASHBOARD_NO_PASSWORD=True
+      - WAHA_DASHBOARD_USERNAME=admin
+      - WAHA_DASHBOARD_PASSWORD=
+      - WAHA_API_KEY=umaapikeyhasheada
+    networks:
+      - condominus-net
+
 networks:
   condominus-net:
     driver: bridge

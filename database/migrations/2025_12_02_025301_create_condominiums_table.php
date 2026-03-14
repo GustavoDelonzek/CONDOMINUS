@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('condominiums', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->foreignUuid('admin_company_id')->constrained();
             $table->text('address_full');
             $table->jsonb('settings')->nullable();
             $table->softDeletes();

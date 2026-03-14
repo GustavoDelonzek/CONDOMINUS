@@ -31,8 +31,6 @@ class CreateUserRequest extends FormRequest
                 'confirmed'
             ],
             'role' => ['required', 'string', 'in:company_admin,syndic,resident'],
-            'admin_company_id' => ['uuid', 'required_without:condominium_id', 'exists:admin_companies,id'],
-            'condominium_id' => ['uuid', 'required_without:admin_company_id', 'exists:condominiums,id'],
             'unit_id' => ['uuid', Rule::requiredIf(fn () => $this->role === 'resident' && $this->filled('condominium_id')), 'exists:units,id'],
         ];
     }

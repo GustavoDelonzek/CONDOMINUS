@@ -26,8 +26,6 @@ Route::prefix('v1')->middleware([
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('user/create', [AuthController::class, 'createUser']);
 
-        Route::apiResource('admin-companies', AdminCompanyController::class)->except(['destroy']);
-
         Route::apiResource('condominiums', CondominiumController::class)->except(['destroy']);
 
         Route::middleware(CheckMembership::class)->group(function () {

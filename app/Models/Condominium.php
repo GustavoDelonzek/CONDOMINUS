@@ -17,15 +17,9 @@ class Condominium extends Model
 
     protected $fillable = [
         'name',
-        'admin_company_id',
         'address_full',
         'settings',
     ];
-
-    public function adminCompany(): BelongsTo
-    {
-        return $this->belongsTo(AdminCompany::class, 'admin_company_id', 'id');
-    }
 
     public function blocks(): HasMany
     {

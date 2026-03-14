@@ -25,7 +25,6 @@ class CondominiumsFiltersRequest extends FormRequest
             'per_page' => ['sometimes', 'integer', 'min:1'],
             'name' => 'sometimes|string',
             'address' => 'sometimes|string',
-            'admin_company_id' => ['sometimes', 'uuid', 'exists:admin_companies,id'], //TODO: isso vai depende muito da rolle do usuário, por enquanto sometimes, irei criar uma função genérica depednendo da role,...
         ];
     }
 }
