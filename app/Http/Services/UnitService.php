@@ -19,7 +19,7 @@ class UnitService
             throw new AccessDeniedHttpException('Access denied for this action.');
         }
 
-        $query = (new UnitFilter(Unit::query()->where($membership->condominium_id), $filters))->applyFilters();
+        $query = (new UnitFilter(Unit::query()->where('condominium_id', $membership->condominium_id), $filters))->applyFilters();
 
         return $query->orderBy('number')
             ->paginate((int) data_get($filters, 'per_page', 15));

@@ -18,43 +18,34 @@ class CondominiumController extends Controller
         private readonly CondominiumService $condominiumService
     ) {}
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(CondominiumsFiltersRequest $request): AnonymousResourceCollection
     {
         return CondominiumResource::collection(
             $this->condominiumService->getCondominiums(
                 $request->validated(),
+                $request->user(),
             )
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreCondominiumRequest $request): CondominiumResource
     {
         return CondominiumResource::make(
-            $this->condominiumService->store($request->validated())
+            $this->condominiumService->store($request->validated(), $request->user())
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Condominium $condominium): CondominiumResource
+    public function show(Request $request, Condominium $condominium): CondominiumResource
     {
-        return CondominiumResource::make($condominium);
+        return CondominiumResource::make(
+            $this->condominiumService->showCondominium($condominium, $request->user())
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateCondominiumRequest $request, Condominium $condominium): CondominiumResource
     {
         return CondominiumResource::make(
-            $this->condominiumService->updateCondominium($condominium, $request->validated())
+            $this->condominiumService->updateCondominium($condominium, $request->validated(), $request->user())
         );
     }
 }

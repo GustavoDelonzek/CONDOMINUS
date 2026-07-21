@@ -95,18 +95,20 @@ services:
     networks:
       - condominus-net
 
-  waha:
-    image: devlikeapro/waha:latest
-    container_name: condominus_waha
+  evolution_api:
+    image: atendai/evolution-api:latest
+    container_name: evolution_api
+    restart: always
     ports:
-      - "3000:3000"
-    environment:
-      - WAHA_DASHBOARD_NO_PASSWORD=True
-      - WAHA_DASHBOARD_USERNAME=admin
-      - WAHA_DASHBOARD_PASSWORD=
-      - WAHA_API_KEY=umaapikeyhasheada
+      - "8080:8080"
+    env_file:
+      - .env.evolution
+    volumes:
+      - evolution_instances:/evolution/instances
     networks:
       - condominus-net
+    depends_on:
+      - db
 
 networks:
   condominus-net:
@@ -116,3 +118,4 @@ volumes:
   pgdata:
   redisdata:
   rabbitmqdata:
+  evolution_instances:
