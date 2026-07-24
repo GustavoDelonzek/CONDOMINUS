@@ -24,6 +24,7 @@ Route::prefix('v1')->middleware([
     Route::middleware(['auth:api'])->group(function () {
 
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('me', [AuthController::class, 'me']);
         Route::post('user/create', [AuthController::class, 'createUser']);
 
         Route::apiResource('condominiums', CondominiumController::class)->except(['destroy']);

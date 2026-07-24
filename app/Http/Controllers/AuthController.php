@@ -35,4 +35,9 @@ class AuthController extends Controller
     {
         return UserResource::make($this->authService->registerUser($request->validated()));
     }
+
+    public function me(): UserResource
+    {
+        return UserResource::make($this->authService->me());
+    }
 }

@@ -36,6 +36,18 @@ class AuthService
         auth('api')->logout();
     }
 
+    public function me(): User
+    {
+        /** @var User $user */
+        $user = auth('api')->user();
+
+        return $user->load([
+            'memberships' => fn ($query) => $query->where('is_active', true),
+            'memberships.condominium',
+            'memberships.unit',
+        ]);
+    }
+
     public function registerUser(array $data): User
     {
         DB::beginTransaction();
