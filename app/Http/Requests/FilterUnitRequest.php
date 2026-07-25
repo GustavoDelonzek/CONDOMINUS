@@ -17,8 +17,8 @@ class FilterUnitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'condominium_id' => 'sometimes|integer|exists:condominiums,id',
-            'block_id' => 'sometimes|integer|exists:blocks,id',
+            'condominium_id' => 'sometimes|string|exists:condominiums,id',
+            'block_id' => 'sometimes|string|exists:blocks,id',
             'number' => 'sometimes|string',
             'floor' => 'sometimes|string',
             'per_page' => 'sometimes|integer|min:1',

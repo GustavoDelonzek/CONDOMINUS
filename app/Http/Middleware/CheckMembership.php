@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Middleware;
-use http\Exception\BadHeaderException;
-use Illuminate\Auth\AuthenticationException;
+use App\Http\Enums\EnumRoleUser;
+use App\Models\Membership;
 use Illuminate\Support\Str;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class CheckMembership
 {
@@ -18,13 +18,24 @@ class CheckMembership
             abort(404, 'Missing X-Condo-Id header');
         }
 
-        $membership = $request->user()->memberships()
+        $user = $request->user();
+
+        $membership = $user->memberships()
             ->where('condominium_id', $condoId)
             ->where('is_active', true)
             ->first();
 
         if (!$membership) {
-            throw new AccessDeniedException('Invalid membership.');
+            if (!$user->is_super_admin) {
+                throw new AccessDeniedHttpException('Invalid membership.');
+            }
+
+            $membership = new Membership([
+                'user_id' => $user->id,
+                'condominium_id' => $condoId,
+                'role' => EnumRoleUser::SYNDIC->value,
+                'is_active' => true,
+            ]);
         }
 
         $request->merge(['current_membership' => $membership]);
