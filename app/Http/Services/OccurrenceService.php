@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Enums\EnumRoleUser;
 use App\Jobs\SendOccurrenceResponseNotification;
 use App\Models\Occurrence;
+use App\Models\WhatsappInstance;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -71,7 +72,16 @@ class OccurrenceService
         if (data_get($data, 'notify_resident') && $adminResponse) {
             $occurrence->loadMissing('user');
             if ($occurrence->user?->phone_number) {
-                SendOccurrenceResponseNotification::dispatch($occurrence->user->phone_number, $adminResponse);
+                $instanceName = WhatsappInstance::where('condominium_id', $occurrence->condominium_id)
+                    ->value('instance_id');
+
+                SendOccurrenceResponseNotification::dispatch(
+                    $occurrence->condominium_id,
+                    $occurrence->user->id,
+                    $occurrence->user->phone_number,
+                    $adminResponse,
+                    $instanceName,
+                );
             }
         }
 

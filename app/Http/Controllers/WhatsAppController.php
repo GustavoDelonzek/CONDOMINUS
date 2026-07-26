@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WhatsAppWebhookRequest;
+use App\Models\WhatsappInstance;
 use App\Services\WhatsApp\WhatsAppService;
 
 class WhatsAppController extends Controller
@@ -14,9 +15,15 @@ class WhatsAppController extends Controller
         $this->whatsAppService = $whatsAppService;
     }
 
-    public function handleWebhook(WhatsAppWebhookRequest $request)
+    public function handleWebhook(WhatsAppWebhookRequest $request, string $instance)
     {
-        $processed = $this->whatsAppService->handleIncomingWebhook($request->validated());
+        $whatsappInstance = WhatsappInstance::where('instance_id', $instance)->first();
+
+        if (!$whatsappInstance) {
+            return response()->json(['status' => 'ignored']);
+        }
+
+        $processed = $this->whatsAppService->handleIncomingWebhook($request->all(), $whatsappInstance);
 
         if (!$processed) {
             return response()->json(['status' => 'ignored']);

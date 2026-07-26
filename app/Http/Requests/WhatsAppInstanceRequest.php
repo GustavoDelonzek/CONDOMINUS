@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\HasCondominiumContext;
 use Illuminate\Foundation\Http\FormRequest;
 
-class WhatsAppWebhookRequest extends FormRequest
+class WhatsAppInstanceRequest extends FormRequest
 {
+    use HasCondominiumContext;
+
     public function authorize(): bool
     {
         return true;

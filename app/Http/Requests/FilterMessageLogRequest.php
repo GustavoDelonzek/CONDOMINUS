@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\HasCondominiumContext;
 use Illuminate\Foundation\Http\FormRequest;
 
-class WhatsAppWebhookRequest extends FormRequest
+class FilterMessageLogRequest extends FormRequest
 {
+    use HasCondominiumContext;
+
     public function authorize(): bool
     {
         return true;
@@ -13,6 +16,8 @@ class WhatsAppWebhookRequest extends FormRequest
 
     public function rules(): array
     {
-        return [];
+        return [
+            'per_page' => 'sometimes|integer|min:1',
+        ];
     }
 }

@@ -10,6 +10,8 @@ use App\Http\Controllers\CondominiumController;
 use App\Http\Controllers\CommonAreaController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\OccurrenceController;
+use App\Http\Controllers\WhatsAppController;
+use App\Http\Controllers\WhatsAppInstanceController;
 use App\Http\Middleware\CheckMembership;
 
 Route::prefix('v1')->middleware([
@@ -22,6 +24,7 @@ Route::prefix('v1')->middleware([
     });
 
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('whatsapp/webhook/{instance}', [WhatsAppController::class, 'handleWebhook']);
 
     Route::middleware(['auth:api'])->group(function () {
 
@@ -43,6 +46,10 @@ Route::prefix('v1')->middleware([
 
             Route::get('occurrences', [OccurrenceController::class, 'index']);
             Route::patch('occurrences/{occurrence}', [OccurrenceController::class, 'updateStatus']);
+
+            Route::get('whatsapp/instance', [WhatsAppInstanceController::class, 'show']);
+            Route::post('whatsapp/instance', [WhatsAppInstanceController::class, 'connect']);
+            Route::get('whatsapp/messages', [WhatsAppInstanceController::class, 'messages']);
         });
 
 
