@@ -202,6 +202,9 @@ class ProcessWhatsAppMessage implements ShouldQueue
                     $whatsapp->sendMessage($phone, "Sorry, this time is already occupied. Try another date or time.");
                     $this->updateStep($phone, self::STEP_RESERVATION_DATE, $formData);
                 } else {
+                    $commonArea = CommonArea::find($formData['common_area_id']);
+                    $requiresApproval = data_get($commonArea->booking_rules, 'requires_approval', false);
+
                     $reservation = Reservation::create([
                         'condominium_id' => $session['condominium_id'],
                         'user_id' => $session['user_id'],
@@ -209,9 +212,13 @@ class ProcessWhatsAppMessage implements ShouldQueue
                         'common_area_id' => $formData['common_area_id'],
                         'start_time' => $startTime,
                         'end_time' => $endTime,
-                        'status' => 'confirmed'
+                        'status' => $requiresApproval ? 'pending' : 'confirmed'
                     ]);
-                    $whatsapp->sendMessage($phone, "Reservation confirmed!\n*Protocol:* #{$reservation->id}\n*Space:* " . CommonArea::find($formData['common_area_id'])->name);
+
+                    $statusMessage = $requiresApproval
+                        ? "Reservation requested! Awaiting syndic approval.\n*Protocol:* #{$reservation->id}\n*Space:* {$commonArea->name}"
+                        : "Reservation confirmed!\n*Protocol:* #{$reservation->id}\n*Space:* {$commonArea->name}";
+                    $whatsapp->sendMessage($phone, $statusMessage);
                     $this->resetSession($phone);
                     $this->sendMainMenu($phone, $whatsapp);
                 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\ResponseMiddleware;
 use App\Http\Controllers\CondominiumController;
 use App\Http\Controllers\CommonAreaController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\CheckMembership;
 
 Route::prefix('v1')->middleware([
@@ -35,6 +36,9 @@ Route::prefix('v1')->middleware([
             Route::apiResource('units', UnitController::class);
 
             Route::apiResource('common-areas', CommonAreaController::class);
+
+            Route::get('reservations', [ReservationController::class, 'index']);
+            Route::patch('reservations/{reservation}', [ReservationController::class, 'updateStatus']);
         });
 
 

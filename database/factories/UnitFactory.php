@@ -18,7 +18,7 @@ class UnitFactory extends Factory
     {
         return [
             'number' => fake()->unique()->numberBetween(10, 999),
-            'floor' => fake()->numberBetween(1, 20) . 'º andar',
+            'floor' => (string) fake()->numberBetween(1, 20),
         ];
     }
 }

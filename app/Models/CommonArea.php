@@ -23,6 +23,10 @@ class CommonArea extends Model
         'is_active',
     ];
 
+    protected $casts = [
+        'booking_rules' => 'array',
+    ];
+
     public function condominium(): BelongsTo
     {
         return $this->belongsTo(Condominium::class, 'condominium_id', 'id');
