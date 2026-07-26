@@ -21,6 +21,7 @@ class Occurrence extends Model
         'category',
         'description',
         'status',
+        'priority',
         'admin_response',
         'responded_at'
     ];

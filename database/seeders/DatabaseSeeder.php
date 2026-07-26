@@ -6,6 +6,8 @@ use App\Models\Block;
 use App\Models\CommonArea;
 use App\Models\Condominium;
 use App\Models\Membership;
+use App\Models\Occurrence;
+use App\Models\OccurrenceMedia;
 use App\Models\Reservation;
 use App\Models\Unit;
 use App\Models\User;
@@ -32,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->seedAuthQaUsers();
         $this->seedCommonAreas();
         $this->seedReservations();
+        $this->seedOccurrences();
     }
 
     /**
@@ -326,6 +329,152 @@ class DatabaseSeeder extends Seeder
                     'notes' => $r['notes'],
                 ]
             );
+        }
+    }
+
+    private function seedOccurrences(): void
+    {
+        $condo = Condominium::where('name', 'Residencial Aurora')->first();
+        $units = Unit::where('condominium_id', $condo->id)->orderBy('number')->get();
+
+        $bruno = User::where('email', 'bruno.morador@teste.com')->first();
+        $carla = User::where('email', 'carla.moradora@teste.com')->first();
+        $diego = User::where('email', 'diego.morador@teste.com')->first();
+
+        $occurrences = [
+            // Abertas — ainda sem nenhuma resposta do síndico.
+            [
+                'user' => $bruno,
+                'unit' => $units[0],
+                'description' => '[Barulho Excessivo] Som alto vindo do apartamento vizinho após as 22h, dificultando o descanso.',
+                'status' => 'open',
+                'priority' => 'high',
+                'media' => [['type' => 'image', 'url' => 'https://placehold.co/600x400/png?text=Evidencia+1']],
+            ],
+            [
+                'user' => $carla,
+                'unit' => $units[1],
+                'description' => '[Vazamento] Gotejamento constante no encanamento da cozinha, molhando o armário embaixo da pia.',
+                'status' => 'open',
+                'priority' => 'medium',
+            ],
+            [
+                'user' => $diego,
+                'unit' => $units[2],
+                'description' => '[Sugestão] Poderia instalar mais lixeiras de reciclagem perto da área da churrasqueira?',
+                'status' => 'open',
+                'priority' => 'low',
+            ],
+
+            // Em andamento — síndico já respondeu, mas o caso segue aberto.
+            [
+                'user' => $carla,
+                'unit' => $units[1],
+                'description' => '[Infiltração] Infiltração no teto do banheiro social, aparentemente vindo do andar de cima.',
+                'status' => 'in_progress',
+                'priority' => 'high',
+                'admin_response' => 'Já acionamos a equipe de manutenção para verificar o andar superior.',
+                'responded_at' => now()->subHours(1),
+                'media' => [
+                    ['type' => 'image', 'url' => 'https://placehold.co/600x400/png?text=Mancha+no+teto'],
+                    ['type' => 'document', 'url' => 'https://placehold.co/600x800/png?text=Laudo+PDF'],
+                ],
+            ],
+            [
+                'user' => $bruno,
+                'unit' => $units[0],
+                'description' => '[Portão] Portão da garagem travando ao abrir, precisa de lubrificação.',
+                'status' => 'in_progress',
+                'priority' => 'medium',
+                'admin_response' => 'Equipe de manutenção já está a caminho, previsão de conserto ainda hoje.',
+                'responded_at' => now()->subMinutes(40),
+            ],
+            [
+                'user' => $diego,
+                'unit' => $units[2],
+                'description' => '[Pintura] Pintura da fachada descascando perto da entrada do Bloco B.',
+                'status' => 'in_progress',
+                'priority' => 'low',
+                'admin_response' => 'Orçamento solicitado a duas empresas, aguardando retorno.',
+                'responded_at' => now()->subDays(2),
+            ],
+
+            // Resolvidas — encerradas com sucesso do ponto de vista do problema em si.
+            [
+                'user' => $diego,
+                'unit' => $units[2],
+                'description' => '[Lâmpada] Lâmpada queimada no corredor do 3º andar, próximo ao elevador.',
+                'status' => 'resolved',
+                'priority' => 'low',
+                'admin_response' => 'Lâmpada substituída pela equipe de zeladoria.',
+                'responded_at' => now()->subDay(),
+            ],
+            [
+                'user' => $bruno,
+                'unit' => $units[0],
+                'description' => '[Pragas] Formigueiro na área da academia, próximo aos equipamentos.',
+                'status' => 'resolved',
+                'priority' => 'medium',
+                'admin_response' => 'Dedetização realizada nesta semana, problema resolvido.',
+                'responded_at' => now()->subDays(4),
+            ],
+            [
+                'user' => $carla,
+                'unit' => $units[1],
+                'description' => '[Vazamento] Vazamento no registro geral do Bloco A foi identificado e reparado.',
+                'status' => 'resolved',
+                'priority' => 'high',
+                'admin_response' => 'Encanador contratado, reparo concluído e testado sem novos vazamentos.',
+                'responded_at' => now()->subDays(6),
+            ],
+
+            // Encerradas — casos antigos, arquivados.
+            [
+                'user' => $bruno,
+                'unit' => $units[0],
+                'description' => '[Barulho] Reclamação de obra em horário não permitido no fim de semana.',
+                'status' => 'closed',
+                'priority' => 'medium',
+                'admin_response' => 'Morador responsável foi notificado e o caso foi encerrado sem novas ocorrências.',
+                'responded_at' => now()->subDays(10),
+            ],
+            [
+                'user' => $diego,
+                'unit' => $units[2],
+                'description' => '[Elevador] Elevador social apresentando ruído estranho ao subir.',
+                'status' => 'closed',
+                'priority' => 'high',
+                'admin_response' => 'Manutenção da empresa terceirizada concluída, elevador revisado e liberado.',
+                'responded_at' => now()->subDays(15),
+            ],
+        ];
+
+        foreach ($occurrences as $data) {
+            $occurrence = Occurrence::firstOrCreate(
+                [
+                    'unit_id' => $data['unit']->id,
+                    'description' => $data['description'],
+                ],
+                [
+                    'condominium_id' => $condo->id,
+                    'user_id' => $data['user']->id,
+                    'category' => 'WhatsApp',
+                    'status' => $data['status'],
+                    'priority' => $data['priority'],
+                    'admin_response' => $data['admin_response'] ?? null,
+                    'responded_at' => $data['responded_at'] ?? null,
+                ]
+            );
+
+            foreach ($data['media'] ?? [] as $media) {
+                OccurrenceMedia::firstOrCreate([
+                    'occurrence_id' => $occurrence->id,
+                    'media_url' => $media['url'],
+                ], [
+                    'media_type' => $media['type'],
+                    'uploaded_at' => now(),
+                ]);
+            }
         }
     }
 

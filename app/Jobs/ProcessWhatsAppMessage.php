@@ -153,7 +153,7 @@ class ProcessWhatsAppMessage implements ShouldQueue
                 'unit_id' => $session['unit_id'],
                 'category' => 'WhatsApp',
                 'description' => "[{$formData['title']}] " . $formData['description'],
-                'status' => 'pending'
+                'status' => 'open'
             ]);
 
             $whatsapp->sendMessage($phone, "Occurrence registered successfully!\n*Protocol:* #{$occurrence->id}\n\nPlease wait for administration feedback.");

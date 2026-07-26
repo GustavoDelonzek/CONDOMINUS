@@ -9,6 +9,7 @@ use App\Http\Middleware\ResponseMiddleware;
 use App\Http\Controllers\CondominiumController;
 use App\Http\Controllers\CommonAreaController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\OccurrenceController;
 use App\Http\Middleware\CheckMembership;
 
 Route::prefix('v1')->middleware([
@@ -39,6 +40,9 @@ Route::prefix('v1')->middleware([
 
             Route::get('reservations', [ReservationController::class, 'index']);
             Route::patch('reservations/{reservation}', [ReservationController::class, 'updateStatus']);
+
+            Route::get('occurrences', [OccurrenceController::class, 'index']);
+            Route::patch('occurrences/{occurrence}', [OccurrenceController::class, 'updateStatus']);
         });
 
 
